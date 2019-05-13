@@ -17,6 +17,7 @@ const App: React.FC = () => {
 
     useEffect(() => {
         fetchData();
+        // eslint-disable-next-line
     }, []);
 
     const fetchData = () => {
