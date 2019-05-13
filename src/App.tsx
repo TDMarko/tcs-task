@@ -16,19 +16,20 @@ const App: React.FC = () => {
     let timeout: any;
 
     useEffect(() => {
-        fetchData();
+        // TODO: we need to pass updated state here, can be buggy
+        fetchData(city);
         // eslint-disable-next-line
     }, []);
 
-    const fetchData = () => {
+    const fetchData = (directCity: string) => {
         clearTimeout(timeout);
 
-        // TODO: some timeout bug here, still sending unwanted requests
+        // TODO: some timeout bug here, still sending unwanted requests (use axios canceltoken)
         timeout = setTimeout(async () => {
             try {
                 // TODO: of course, keeping link in such way with key ir wrong, but this is demo app, so...
                 const result = await axios.get(
-                    `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=3bd9a65beb67d52b8250ce5ee16d364d&units=metric`);
+                    `http://api.openweathermap.org/data/2.5/weather?q=${directCity}&appid=3bd9a65beb67d52b8250ce5ee16d364d&units=metric`);
 
                 store.dispatch(getForecast(result.data));
             } catch (error) {
@@ -40,7 +41,7 @@ const App: React.FC = () => {
 
     const changeCity = (city: string) => {
         updateCity(city);
-        fetchData();
+        fetchData(city);
     }
 
     return (
