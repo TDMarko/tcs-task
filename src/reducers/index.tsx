@@ -7,7 +7,6 @@ const initialState = {
 }
 
 export const forecastReducer = (state = initialState, action: any) => {
-    console.log(action.payload)
     switch (action.type) {
         case GET_FORECAST:
             return {

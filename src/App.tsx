@@ -13,8 +13,6 @@ const store = createStore(forecastReducer);
 
 const App: React.FC = () => {
     const [city, updateCity] = useState('Riga');
-    const [data, updateData] = useState({});
-    const [loading, updateLoading] = useState(false);
     let timeout: any;
 
     useEffect(() => {
@@ -22,22 +20,21 @@ const App: React.FC = () => {
     }, []);
 
     const fetchData = () => {
-        updateLoading(true);
         clearTimeout(timeout);
 
         // TODO: some timeout bug here, still sending unwanted requests
         timeout = setTimeout(async () => {
             try {
+                // TODO: of course, keeping link in such way with key ir wrong, but this is demo app, so...
                 const result = await axios.get(
                     `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=3bd9a65beb67d52b8250ce5ee16d364d&units=metric`);
 
-                updateLoading(false);
-                updateData(result.data);
                 store.dispatch(getForecast(result.data));
             } catch (error) {
-                updateData({ error: true });
+                // TODO: should make propper error handling
+                store.dispatch(getForecast({ error: true }));
             }
-        }, 2000);
+        }, 1000);
     }
 
     const changeCity = (city: string) => {
@@ -50,7 +47,7 @@ const App: React.FC = () => {
             <div className="App">
                 <Wrapper>
                     <Input placeholder="Enter city..." value={city} onChange={(e) => changeCity(e.target.value)} autoFocus />
-                    <Forecast city={city} loading={loading} />
+                    <Forecast city={city} />
                 </Wrapper>
             </div>
         </Provider>
